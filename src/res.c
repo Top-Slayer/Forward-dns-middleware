@@ -1,5 +1,7 @@
-#include "res.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "util.h"
 
 char* custom_res(char *content, char *type) {
     size_t body_len = strlen(content);

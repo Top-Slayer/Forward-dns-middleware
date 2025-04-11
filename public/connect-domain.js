@@ -1,2 +1,2 @@
-localStorage.setItem('domain', 'example.com');
+localStorage.setItem('domain', 'gg.com');
 console.log("Hello")

@@ -1,1 +1,1 @@
-localStorage.setItem("domain","example.com"),console.log("Hello");
+localStorage.setItem("domain","gg.com"),console.log("Hello");
