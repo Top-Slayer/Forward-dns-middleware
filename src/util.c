@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <cjson/cJSON.h>
+#include <dirent.h>
+#include <sys/stat.h>
 #include "util.h"
 #include "type.h"
 
@@ -11,7 +13,7 @@ char *read_file(char *path, char *arg)
     FILE *fp = fopen(path, arg);
     if (fp == NULL)
     {
-        perror("File not found");
+        LOG_ERR("File not found");
         return NULL;
     }
 
@@ -22,7 +24,7 @@ char *read_file(char *path, char *arg)
     char *data = (char *)malloc(len + 1);
     if (data == NULL)
     {
-        perror("Memory allocation failed");
+        LOG_ERR("Memory allocation failed");
         fclose(fp);
         return NULL;
     }
@@ -37,14 +39,32 @@ char *read_file(char *path, char *arg)
 
 void getdns(FwDns **fwdns)
 {
+    DIR *dir = opendir("misc");
+    if (dir)
+    {
+        closedir(dir);
+    }
+    else
+    {
+        if (mkdir("misc", 0777) == 0)
+        {
+            printf("Directory created successfully.\n");
+        }
+        else
+        {
+            LOG_ERR("Failed to create directory");
+            return;
+        }
+    }
+
     char *data = read_file("misc/dnsmap.json", "r");
 
     cJSON *root = cJSON_Parse(data);
     if (!root)
     {
-        perror("JSON parse error\n");
+        LOG_ERR("JSON parse error");
         free(data);
-        return;
+        exit(1);
     }
 
     *fwdns = (FwDns *)malloc(sizeof(FwDns) * cJSON_GetArraySize(root));

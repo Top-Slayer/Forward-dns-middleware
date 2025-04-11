@@ -7,7 +7,7 @@ char* custom_res(char *content, char *type) {
     size_t body_len = strlen(content);
     char *body = (char *)malloc(body_len + 1);
     if (!body) {
-        perror("malloc failed");
+        LOG_ERR("malloc failed");
         return NULL;
     }
 
@@ -28,7 +28,7 @@ char* custom_res(char *content, char *type) {
 
     char *response = (char *)malloc(response_len);
     if (!response) {
-        perror("malloc failed");
+        LOG_ERR("malloc failed");
         free(body);
         return NULL;
     }
