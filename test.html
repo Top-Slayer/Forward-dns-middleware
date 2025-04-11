@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="public/output.js" defer></script>
+  </head>
+
+  <body>
+    <div id="domain">loading...</div>
+	
+    <script>
+      var domain_val = localStorage.getItem("domain");
+      if (domain_val) {
+        document.getElementById("domain").innerHTML = domain_val;
+      } else {
+        alert(domain_val);
+      }
+    </script>
+  </body>
+</html>
