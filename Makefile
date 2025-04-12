@@ -22,7 +22,7 @@ clean:
 
 compressjs:
 	if command -v uglifyjs >/dev/null 2>&1; then \
-		uglifyjs ./public/connect-domain.js -c -m > ./public/output.js; \
+		uglifyjs ./public/connect-domain.js -c -m > ./public/conn-dom.js; \
 		echo "Compressed successful"; \
 	else \
 		npm install -g uglifyjs; \

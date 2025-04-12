@@ -1,4 +1,3 @@
-#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,7 +36,7 @@ char *read_file(char *path, char *arg)
     return data;
 }
 
-void getdns(FwDns **fwdns)
+void getdns(FwDns **fwdns, int *size)
 {
     DIR *dir = opendir("misc");
     if (dir)
@@ -67,7 +66,8 @@ void getdns(FwDns **fwdns)
         exit(1);
     }
 
-    *fwdns = (FwDns *)malloc(sizeof(FwDns) * cJSON_GetArraySize(root));
+    *size = cJSON_GetArraySize(root);
+    *fwdns = (FwDns *)malloc(sizeof(FwDns) * (*size));
 
     cJSON *current_element = NULL;
     int index = 0;

@@ -6,20 +6,26 @@
 #include <fcntl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <errno.h>
 #include "util.h"
 #include "type.h"
+#include "handle.h"
 
 #define PORT 8080
 #define BUFFER_SIZE 2048
 
 FwDns *fwdns_obj = NULL;
+int size = 0;
 
 int main()
 {
-    getdns(&fwdns_obj);
+    getdns(&fwdns_obj, &size);
 
-    printf("%s\n", fwdns_obj[0].domain);
+    printf("Forwarding URL:\n");
+    for (int i = 0; i < size; i++)
+    {
+        printf("http://localhost:%d%s -> %s\n", PORT, fwdns_obj[i].route, fwdns_obj[i].domain);
+    }
+    
 
     int server_fd, new_socket;
     struct sockaddr_in address;
@@ -74,19 +80,34 @@ int main()
 
         printf("Received request:\n%s\n", buffer);
 
-        if (strstr(buffer, "GET /output.js") != NULL)
-        {
-            char *content = read_file("public/output.js", "rb");
+        // send connect into middleware js file
+        HTTP_GET(buffer, "/conn-dom.js", {
+            char *content = read_file("public/conn-dom.js", "rb");
             if (content != NULL)
             {
-                char *response = custom_res(content, "application/javascript");
+                char *response = serve_js(content, "application/javascript");
                 if (response != NULL)
                 {
                     send(new_socket, response, strlen(response), 0);
-                    printf("Response sent for /output.js\n");
                     free(response);
                 }
                 free(content);
+            }
+        });
+
+        // loop forwarding url
+        for (int i = 0; i < size; i++)
+        {
+            char temp[256];
+            snprintf(temp, sizeof(temp), "GET %s", fwdns_obj[i].route);
+            if (strstr(buffer, temp))
+            {
+                char *response = forward_url(fwdns_obj[i].domain);
+                if (response != NULL)
+                {
+                    send(new_socket, response, strlen(response), 0);
+                    free(response);
+                }
             }
         }
 
