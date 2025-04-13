@@ -58,9 +58,10 @@ char *forward_url(char *url)
     strcpy(body, url);
 
     const char *header_template =
-        "HTTP/1.1 302 Found\r\n"
-        "Location: %s\r\n"
-        "Content-Length: 0\r\n"
+        "HTTP/1.1 200 OK\r\n"
+        "Content-Type: text/plain\r\n"
+        "Access-Control-Allow-Origin: *\r\n"
+        "Content-Length: %zu\r\n"
         "Connection: close\r\n"
         "\r\n";
 
@@ -75,7 +76,7 @@ char *forward_url(char *url)
         return NULL;
     }
 
-    sprintf(response, header_template, url);
+    sprintf(response, header_template, body_len);
     strcat(response, body);
 
     free(body);

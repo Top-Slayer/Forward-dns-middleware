@@ -2,3 +2,4 @@ build/
 .vscode/
 app
 misc/
+bfsv.sh

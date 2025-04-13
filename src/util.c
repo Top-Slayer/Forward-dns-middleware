@@ -4,6 +4,8 @@
 #include <cjson/cJSON.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <termios.h>
+#include <unistd.h>
 #include "util.h"
 #include "type.h"
 
@@ -80,4 +82,20 @@ void getdns(FwDns **fwdns, int *size)
 
     cJSON_Delete(root);
     free(data);
+}
+
+char getch()
+{
+    struct termios oldt, newt;
+    char c;
+
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+    read(STDIN_FILENO, &c, 1);
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    return c;
 }
