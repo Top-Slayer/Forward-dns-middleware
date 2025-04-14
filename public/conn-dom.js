@@ -1,1 +1,1 @@
-fetch("http://localhost:8080/mrc").then(t=>t.text()).then(t=>{console.log("Redirect target:",t)});
+var temp_dom=localStorage.getItem("domain"),fet_url="{{domain}}";function fetch_redir_dom(e){console.log("Fetching redirect domain..."),fetch(e).then(e=>e.text()).then(e=>{localStorage.setItem("domain",e)})}null==temp_dom?fetch_redir_dom(fet_url):fetch(temp_dom).catch(e=>{fetch_redir_dom(fet_url)});

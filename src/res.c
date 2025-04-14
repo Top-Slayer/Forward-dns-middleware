@@ -22,7 +22,6 @@ char *serve_js(char *content, char *type)
         "Content-Type: %s\r\n"
         "Access-Control-Allow-Origin: *\r\n"
         "Content-Length: %zu\r\n"
-        "Content-Disposition: inline; filename=\"public/output.js\"\r\n"
         "Connection: close\r\n"
         "\r\n";
 
@@ -45,9 +44,9 @@ char *serve_js(char *content, char *type)
     return response;
 }
 
-char *forward_url(char *url)
+char *forward_url(char *content)
 {
-    size_t body_len = strlen(url);
+    size_t body_len = strlen(content);
     char *body = (char *)malloc(body_len + 1);
     if (!body)
     {
@@ -55,11 +54,11 @@ char *forward_url(char *url)
         return NULL;
     }
 
-    strcpy(body, url);
+    strcpy(body, content);
 
     const char *header_template =
         "HTTP/1.1 200 OK\r\n"
-        "Content-Type: text/plain\r\n"
+        "Content-Type: application/javascript\r\n"
         "Access-Control-Allow-Origin: *\r\n"
         "Content-Length: %zu\r\n"
         "Connection: close\r\n"

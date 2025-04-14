@@ -3,3 +3,4 @@ build/
 app
 misc/
 bfsv.sh
+.gdb_history

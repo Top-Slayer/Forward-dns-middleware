@@ -1,5 +1,5 @@
 CC = clang
-CFLAGS = -Iinclude -Wall
+CFLAGS = -Iinclude -Wall -g
 LDFLAGS = -lcjson
 SRC = main.c $(wildcard src/*.c)
 BUILD = build

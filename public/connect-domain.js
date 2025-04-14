@@ -1,10 +1,21 @@
-// var domain_val = localStorage.getItem("domain");
+var temp_dom = localStorage.getItem("domain");
+var fet_url = "{{domain}}";
 
-// localStorage.setItem('domain', 'gg.com');
-// console.log("Hello")
+function fetch_redir_dom(fet_url) {
+  console.log("Fetching redirect domain...")
+  fetch(fet_url)
+    .then(res => res.text())
+    .then(url => {
+      localStorage.setItem('domain', url);
+    });
+}
 
-fetch("http://localhost:8080/mrc")
-  .then(res => res.text())
-  .then(url => {
-    console.log("Redirect target:", url);
-  });
+if (temp_dom == null) {
+  fetch_redir_dom(fet_url);
+
+} else {
+  fetch(temp_dom)
+    .catch(_ => {
+      fetch_redir_dom(fet_url);
+    });
+}

@@ -10,6 +10,6 @@ char *serve_js(char *content, char *type);
 char *forward_url(char *url);
 char *read_file(char *path, char *arg);
 void getdns(FwDns **fwdns, int *size);
-char getch();
+char *replace_placeholder(char* source, const char* placeholder, const char* value);
 
 #endif
